@@ -1,1 +1,1 @@
-# deus-cuida
+# deus-cuida plugin
