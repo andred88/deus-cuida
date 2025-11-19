@@ -1,3 +1,9 @@
+<?php
+if ( ! current_user_can('edit_acomp') ) {
+    wp_die(__('Você não tem permissão para editar acompanhamentos.', 'meu-plugin'));
+}
+?>
+
 <h1>Acompanhamentos</h1>
 <p>
     <a href="<?php echo esc_url(admin_url('admin.php?page=mpd-acompanhamentos&action=add')); ?>" class="button button-primary">

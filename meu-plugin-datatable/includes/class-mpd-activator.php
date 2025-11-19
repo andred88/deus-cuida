@@ -63,7 +63,9 @@ class MPD_Activator {
             $role->add_cap('manage_members');        // Gerenciar membros
             $role->add_cap('edit_members');          // Editar membros
             $role->add_cap('delete_members');        // Remover membros
-            $role->add_cap('add_acompanhamentos');   // Adicionar acompanhamentos
+            $role->add_cap('add_acomp');   // Adicionar acompanhamentos
+            $role->add_cap('del_acomp');   // Deletar acompanhamentos
+            $role->add_cap('edit_acomp');   // Edit acompanhamentos
         }
 
     }

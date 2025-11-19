@@ -3,6 +3,12 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 global $wpdb;
 $table = $wpdb->prefix . 'mpd_membros';
+// verificação de permissao 
+
+if ( ! current_user_can('add_members') ) {
+    wp_die(__('Você não tem permissão para adicionar membros.', 'meu-plugin'));
+}
+
 
 // Processar formulário
 if (isset($_POST['mpd_add']) && check_admin_referer('mpd_add_member', 'mpd_nonce')) {

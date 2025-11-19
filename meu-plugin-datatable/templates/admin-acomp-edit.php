@@ -1,3 +1,9 @@
+<?php
+if ( ! current_user_can('edit_acomp') ) {
+    wp_die(__('Você não tem permissão para editar acompanhamentos.', 'meu-plugin'));
+}
+?>
+
 <h2>Editar Acompanhamento</h2>
 
 <?php

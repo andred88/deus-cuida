@@ -1,3 +1,10 @@
+// verificar permissoes`
+<?php
+if ( ! current_user_can('add_acomp') ) {
+    wp_die(__('Você não tem permissão para adicionar Acompanhamento.', 'meu-plugin'));
+}
+?>
+
 <h2>Novo Acompanhamento</h2>
 
 <?php

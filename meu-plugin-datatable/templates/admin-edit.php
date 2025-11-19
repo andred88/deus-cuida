@@ -12,6 +12,12 @@ if (!$membro) {
     return;
 }
 
+// verificar permissoes
+
+if ( ! current_user_can('edit_members') ) {
+    wp_die(__('Você não tem permissão para editar membros.', 'meu-plugin'));
+}
+
 // Processar atualização
 if (isset($_POST['mpd_update']) && check_admin_referer('mpd_edit_member', 'mpd_nonce')) {
     // Upload da foto
