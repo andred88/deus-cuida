@@ -47,5 +47,24 @@ class MPD_Activator {
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
         dbDelta($sql_membros);
         dbDelta($sql_acomp);
+
+        
+        if (!get_role('formador')) {
+            add_role(
+                'formador',
+                    __('Formador', 'meu-plugin'),
+                    array('read' => true)
+                );
+        }
+
+        // Adiciona capabilities à role
+        $role = get_role('formador');
+        if ($role) {
+            $role->add_cap('manage_members');        // Gerenciar membros
+            $role->add_cap('edit_members');          // Editar membros
+            $role->add_cap('delete_members');        // Remover membros
+            $role->add_cap('add_acompanhamentos');   // Adicionar acompanhamentos
+        }
+
     }
 }
