@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Meu Plugin DataTable 1.1
+ * Plugin Name: Deus Cuida - Gestao de Membros BTH 1.1
  * Description: Gerenciamento de membros com DataTables, segurança reforçada e estrutura modular.
  * Version: 1.1
  * Author: André Deitos - Bethania TECH

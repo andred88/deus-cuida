@@ -49,24 +49,24 @@ class MPD_Activator {
         dbDelta($sql_acomp);
 
         
+       
         if (!get_role('formador')) {
-            add_role(
-                'formador',
-                    __('Formador', 'meu-plugin'),
-                    array('read' => true)
-                );
+            add_role('formador', __('Formador', 'meu-plugin'), ['read' => true]);
         }
 
-        // Adiciona capabilities à role
-        $role = get_role('formador');
-        if ($role) {
-            $role->add_cap('manage_members');        // Gerenciar membros
-            $role->add_cap('edit_members');          // Editar membros
-            $role->add_cap('delete_members');        // Remover membros
-            $role->add_cap('add_acomp');   // Adicionar acompanhamentos
-            $role->add_cap('del_acomp');   // Deletar acompanhamentos
-            $role->add_cap('edit_acomp');   // Edit acompanhamentos
-        }
+        $formador = get_role('formador');
+        $admin = get_role('administrator');
+
+        $caps = ['manage_members', 'edit_members', 'delete_members', 'add_members', 'add_acomp', 'del_acomp', 'edit_acomp'];
+
+            foreach ($caps as $cap) {
+                if ($formador) {
+                    $formador->add_cap($cap);
+                }
+                if ($admin) {
+                    $admin->add_cap($cap);
+                }
+            }     
 
     }
 }
