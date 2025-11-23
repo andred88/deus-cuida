@@ -11,8 +11,8 @@ if ( ! current_user_can( 'activate_plugins' ) ) {
     exit;
 }
 
-global $wpdb;
-$table = $wpdb->prefix . 'mpd_membros';
+//global $wpdb;
+//$table = $wpdb->prefix . 'mpd_membros';
 
 // Remover tabela
-$wpdb->query("DROP TABLE IF EXISTS $table");
+//$wpdb->query("DROP TABLE IF EXISTS $table");

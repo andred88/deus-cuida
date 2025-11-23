@@ -90,15 +90,12 @@ $recantos = $wpdb->get_col("SELECT DISTINCT recanto FROM {$wpdb->prefix}mpd_memb
     Exportar CSV
 </a>
 
-
-
 <div class="wrap">
     <h1>Lista de Férias 
-        <?php if (current_user_can('manage_ferias')): ?>
+        <?php if (current_user_can('manage_ferias')): ?>    
             <a href="<?php echo admin_url('admin.php?page=mpd-ferias-add'); ?>" class="page-title-action">Adicionar Novo</a>
         <?php endif; ?>
     </h1>
-
     <table class="wp-list-table widefat fixed striped">
         <thead>
             <tr>
@@ -112,89 +109,53 @@ $recantos = $wpdb->get_col("SELECT DISTINCT recanto FROM {$wpdb->prefix}mpd_memb
                 <th>Ações</th>
             </tr>
         </thead>
-        <tbody>
-            
+        <tbody>            
             <?php if ($registros): ?>
                 <?php foreach ($registros as $r): ?>
                     <?php
-                        // Função para formatar data no padrão dd/mm/aaaa                 
-                        function format_date($date) {
-                            if (!empty($date) && strtotime($date) && $date !== '0000-00-00') {
-                                return date('d/m/Y', strtotime($date));
-                            }
-                            return '';
-                        }
-                        
-                        $tiradas = [];
-                        if (!empty($r->tiradas_inicio_1) && !empty($r->tiradas_fim_1)) {
-                            $start = format_date($r->tiradas_inicio_1);
-                            $end = format_date($r->tiradas_fim_1);
-                            if ($start && $end) {
-                                $tiradas[] = $start . ' a ' . $end;
-                            }
-                        }
+                    // Combinar datas tiradas
+                    $tiradas = [];
+                    if ($r->tiradas_inicio_1 && $r->tiradas_fim_1) {
+                        $tiradas[] = $r->tiradas_inicio_1 . ' a ' . $r->tiradas_fim_1;
+                    }
+                    if ($r->tiradas_inicio_2 && $r->tiradas_fim_2) {
+                        $tiradas[] = $r->tiradas_inicio_2 . ' a ' . $r->tiradas_fim_2;
+                    }
 
-                        if (!empty($r->tiradas_inicio_2) && !empty($r->tiradas_fim_2)) {
-                            $start = format_date($r->tiradas_inicio_2);
-                            $end = format_date($r->tiradas_fim_2);
-                            if ($start && $end) {
-                                $tiradas[] = $start . ' a ' . $end;
-                            }
-                        }
+                    // Combinar datas programadas
+                    $programadas = [];
+                    if ($r->programacao_inicio_1 && $r->programacao_fim_1) {
+                        $programadas[] = $r->programacao_inicio_1 . ' a ' . $r->programacao_fim_1;
+                    }
+                    if ($r->programacao_inicio_2 && $r->programacao_fim_2) {
+                        $programadas[] = $r->programacao_inicio_2 . ' a ' . $r->programacao_fim_2;
+                    }
 
-                        $programadas = [];
-                        if (!empty($r->programacao_inicio_1) && !empty($r->programacao_fim_1)) {
-                            $start = format_date($r->programacao_inicio_1);
-                            $end = format_date($r->programacao_fim_1);
-                            if ($start && $end) {
-                                $programadas[] = $start . ' a ' . $end;
-                            }
-                        }
-
-                        if (!empty($r->programacao_inicio_2) && !empty($r->programacao_fim_2)) {
-                            $start = format_date($r->programacao_inicio_2);
-                            $end = format_date($r->programacao_fim_2);
-                            if ($start && $end) {
-                                $programadas[] = $start . ' a ' . $end;
-                            }
-                        }
-
-
-                        // Calcular total de dias tirados
-                        $total_dias = 0;
-
-                        function dias_intervalo($inicio, $fim) {
-                            if (!empty($inicio) && !empty($fim) && $inicio !== '0000-00-00' && $fim !== '0000-00-00') {
-                                $d1 = new DateTime($inicio);
-                                $d2 = new DateTime($fim);
-                                if ($d2 >= $d1) {
-                                    return $d1->diff($d2)->days + 1; // Inclusivo
-                                }
-                            }
-                            return 0;
-                        }
-
-                        $total_dias += dias_intervalo($r->tiradas_inicio_1, $r->tiradas_fim_1);
-                        $total_dias += dias_intervalo($r->tiradas_inicio_2, $r->tiradas_fim_2);
-
+                    // Calcular total de dias tirados
+                    $total_dias = 0;
+                    if ($r->tiradas_inicio_1 && $r->tiradas_fim_1) {
+                        $d1 = new DateTime($r->tiradas_inicio_1);
+                        $d2 = new DateTime($r->tiradas_fim_1);
+                        $total_dias += $d1->diff($d2)->days + 1;
+                    }
+                    if ($r->tiradas_inicio_2 && $r->tiradas_fim_2) {
+                        $d3 = new DateTime($r->tiradas_inicio_2);
+                        $d4 = new DateTime($r->tiradas_fim_2);
+                        $total_dias += $d3->diff($d4)->days + 1;
+                    }
                     ?>
-                    
                     <tr>
                         <td><?php echo esc_html($r->nome); ?></td>
                         <td><?php echo esc_html($r->grau_pertencimento); ?></td>
                         <td><?php echo esc_html($r->recanto); ?></td>
-                        <td><?php echo $r->ja_tirou_ferias ? 'Sim' : 'Não'; ?></td>                     
-                        <td><?php echo !empty($tiradas) ? implode('<br>', $tiradas) : ''; ?></td>
-                        <td><?php echo !empty($programadas) ? implode('<br>', $programadas) : ''; ?></td>
-                        <td><?php echo $total_dias > 0 ? $total_dias . ' dias' : '-'; ?></td>
+                        <td><?php echo $r->ja_tirou_ferias ? 'Sim' : 'Não'; ?></td>
+                        <td><?php echo implode('<br>', $tiradas); ?></td>
+                        <td><?php echo implode('<br>', $programadas); ?></td>
+                        <td><?php echo $total_dias . ' dias'; ?></td>
                         <td>
                             <?php if (current_user_can('manage_ferias')): ?>
-                                <?php
-                                    $edit_url = admin_url('admin.php?page=mpd-ferias-edit&id=' . $r->id);
-                                    $delete_url = wp_nonce_url(admin_url('admin.php?page=mpd-ferias&action=delete&id=' . $r->id), 'mpd_delete_ferias_' . $r->id);
-                                ?>
-                                <a href="<?php echo esc_url($edit_url); ?>">Editar</a> |
-                                <a href="<?php echo esc_url($delete_url); ?>" onclick="return confirm('Tem certeza que deseja excluir este registro?');">Excluir</a>
+                                <?php echo admin_url(id); ?>">Editar</a> |
+                                <?php echo wp_nonce_url(admin_url(id), 'mpd_delete_ferias_' . $r->id); ?>" onclick="return confirm('Tem certeza que deseja excluir este registro?');">Excluir</a>
                             <?php endif; ?>
                         </td>
                     </tr>
