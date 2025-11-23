@@ -85,18 +85,9 @@ $membros = $wpdb->get_results("SELECT * FROM $table ORDER BY id DESC");
                 <td><?php echo esc_html($tempo_etapa); ?></td>
                 <td><?php echo esc_html($tempo_comunidade); ?></td>
                 <td>
-                    // Verificar permissões no template  //
-                    <?php if ( current_user_can('edit_members') ) : ?>
-                        <?php echo esc_url($edit_url); ?>Editar</a>
-                    <?php endif; ?>
-                    <?php echo esc_url($detail_url); ?>Detalhes</a>
-                    <?php if ( current_user_can('delete_members') ) : ?>
-                        <?php echo esc_url($delete_url); ?>Excluir</a>
-                    <?php endif; ?>
-
-                    <a href="<?php echo esc_url($detail_url); ?>" class="button">Detalhes</a>
-                    <a href="<?php echo esc_url($edit_url); ?>" class="button button-primary">Editar</a>
-                    <a href="<?php echo esc_url($delete_url); ?>" class="button button-secondary" onclick="return confirm('Tem certeza que deseja excluir?');">Excluir</a>
+                <a href="<?php echo esc_url($detail_url); ?>" class="button">Detalhes</a>
+                <a href="<?php echo esc_url($edit_url); ?>" class="button button-primary">Editar</a>
+                <a href="<?php echo esc_url($delete_url); ?>" class="button button-secondary" onclick="return confirm('Tem certeza que deseja excluir?');">Excluir</a>
                 </td>
             </tr>
         <?php endforeach; ?>

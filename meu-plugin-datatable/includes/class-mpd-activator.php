@@ -44,12 +44,36 @@ class MPD_Activator {
             PRIMARY KEY (id)
         ) $charset_collate;";
 
+        // Tabela de férias
+
+        $table_ferias = $wpdb->prefix . 'mpd_ferias';
+        $sql_ferias = "CREATE TABLE $table_ferias (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            membro_id BIGINT(20) UNSIGNED NOT NULL,
+            ja_tirou_ferias TINYINT(1) DEFAULT 0,
+            programacao_inicio_1 DATE NULL,
+            programacao_fim_1 DATE NULL,
+            programacao_inicio_2 DATE NULL,
+            programacao_fim_2 DATE NULL,
+            tiradas_inicio_1 DATE NULL,
+            tiradas_fim_1 DATE NULL,
+            tiradas_inicio_2 DATE NULL,
+            tiradas_fim_2 DATE NULL,
+            ajuda_custo TINYINT(1) DEFAULT 0,
+            valor_ajuda DECIMAL(10,2) DEFAULT 0.00,
+            observacoes TEXT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            PRIMARY KEY (id),
+            KEY membro_id (membro_id)
+        ) $charset_collate;";
+
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
         dbDelta($sql_membros);
         dbDelta($sql_acomp);
+        dbDelta($sql_ferias);
 
-        
-       
+        // Adiciona o papel de 'formador' com capacidades específicas       
         if (!get_role('formador')) {
             add_role('formador', __('Formador', 'meu-plugin'), ['read' => true]);
         }
@@ -57,7 +81,7 @@ class MPD_Activator {
         $formador = get_role('formador');
         $admin = get_role('administrator');
 
-        $caps = ['manage_members', 'edit_members', 'delete_members', 'add_members', 'add_acomp', 'del_acomp', 'edit_acomp'];
+        $caps = ['manage_members', 'edit_members', 'delete_members', 'add_members', 'add_acomp', 'del_acomp', 'edit_acomp', 'manage_ferias', 'edit_ferias'];
 
             foreach ($caps as $cap) {
                 if ($formador) {

@@ -18,6 +18,7 @@ require_once MPD_PATH . 'includes/class-mpd-deactivator.php';
 require_once MPD_PATH . 'includes/class-mpd-admin.php';
 require_once MPD_PATH . 'includes/class-mpd-database.php';
 require_once MPD_PATH . 'includes/class-mpd-detail.php';
+require_once MPD_PATH . 'includes/class-mpd-ferias.php';
 
 register_activation_hook(__FILE__, ['MPD_Activator', 'activate']);
 register_deactivation_hook(__FILE__, ['MPD_Deactivator', 'deactivate']);
